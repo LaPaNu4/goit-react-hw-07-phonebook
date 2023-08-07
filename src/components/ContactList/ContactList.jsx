@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeContact } from 'Redux/contactsSlice';
+import { deleteContact, fetchContacts,  } from 'Redux/contactsSlice';
 import { selectContacts, selectFilters } from 'Redux/selector';
 
 const ContactList = () => {
   const contacts = useSelector(selectContacts);
   const filter = useSelector(selectFilters);
   const dispatch = useDispatch();
+    useEffect(() => {
+      dispatch(fetchContacts()); // Виклик fetchContacts при монтуванні компонента
+    }, [dispatch]);
   const getFilteredContacts = () => {
     return contacts.filter(
       contact =>
@@ -16,12 +19,9 @@ const ContactList = () => {
   };
   const filteredContacts = getFilteredContacts();
 
-  const removeContactById = (id) => {
-    const contactId = id
-      dispatch(
-      removeContact(contacts.filter(contact => contact.id !== contactId))
-    );
-  };
+   const removeContactById = id => {
+     dispatch(deleteContact(id));
+   };
 
   return (
     <ul>
